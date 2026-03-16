@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.todo.todowebapp.DTO.TaskRequest;
 import com.todo.todowebapp.model.Task;
 import com.todo.todowebapp.repository.TaskRepository;
 
@@ -18,7 +19,12 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Task saveTask(Task task) {
+    public Task saveTask(TaskRequest taskRequest) {
+
+        Task task = new Task();
+        task.setTitle(taskRequest.getTitle());
+        task.setDescription(taskRequest.getDescription());
+
         return taskRepository.save(task);
     }
 
