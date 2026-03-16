@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getTasks, addTask, deleteTask } from "./ApiService/Api";
+import { addTask, deleteTask, completeTask, getUncompletedTasks } from "./ApiService/Api";
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -11,7 +11,7 @@ function App() {
   }, []);
 
   const loadTasks = async () => {
-    const res = await getTasks();
+    const res = await getUncompletedTasks();
     setTasks(res.data);
   };
 
@@ -47,6 +47,11 @@ function App() {
     await deleteTask(id);
     loadTasks();
   };
+
+  const handleComplete = async (id) => {
+    await completeTask(id);
+    loadTasks();
+  }
 
   return (
     <div className="todo-app-wrapper">
@@ -96,11 +101,18 @@ function App() {
                       {task.description && <p>{task.description}</p>}
                       <span className="task-date">{task.date}</span>
                     </div>
-                    <button className="delete-btn" onClick={() => handleDelete(task.id)}>
-                      <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
+                    <div className="task-actions">
+                      <button className="complete-btn" onClick={() => handleComplete(task.id)}>
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                      </button>
+                      <button className="delete-btn" onClick={() => handleDelete(task.id)}>
+                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
                   </li>
                 ))}
               </ul>

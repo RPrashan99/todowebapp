@@ -26,7 +26,7 @@ public class Task {
         return title;
     }
 
-    public String getDescriotion() {
+    public String getDescription() {
         return description;
     }
 
@@ -40,5 +40,9 @@ public class Task {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 }

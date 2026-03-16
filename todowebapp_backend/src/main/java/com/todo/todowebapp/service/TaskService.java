@@ -19,6 +19,10 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
+    public List<Task> getUncompletedTasks() {
+        return taskRepository.findByCompleted(false);
+    }
+
     public Task saveTask(TaskRequest taskRequest) {
 
         Task task = new Task();
@@ -30,6 +34,14 @@ public class TaskService {
 
     public void deleteTask(Long id){
         taskRepository.deleteById(id);
+    }
+
+    public Task completeTask(Long id) {
+        Task task = taskRepository.findById(id).orElseThrow(() -> new RuntimeException("Task not found"));
+        task.setCompleted(true);
+        taskRepository.save(task);
+
+        return task;
     }
 
 }

@@ -19,6 +19,7 @@ import com.todo.todowebapp.service.TaskService;
 
 import jakarta.validation.Valid;
 
+
 @RestController
 @RequestMapping("/api/tasks")
 @CrossOrigin(origins = "http://localhost:3000")
@@ -33,6 +34,11 @@ public class TaskController {
         return taskService.getAllTasks();
     }
 
+    @GetMapping("/uncompleted")
+    public List<Task> getUncompletedTasks() {
+        return taskService.getUncompletedTasks();
+    }
+
     @PostMapping
     public ResponseEntity<?> addTask(@Valid  @RequestBody TaskRequest taskRequest) {
         return ResponseEntity.ok(taskService.saveTask(taskRequest));
@@ -42,5 +48,11 @@ public class TaskController {
     public void deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
     }
+
+    @PostMapping("/complete/{id}")
+    public Task completeTask(@PathVariable Long id) {
+        return taskService.completeTask(id);
+    }
+    
 
 }

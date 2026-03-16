@@ -10,5 +10,7 @@ const api = axios.create({
 });
 
 export const getTasks = () => api.get('/tasks');
+export const getUncompletedTasks = () => api.get('/tasks/uncompleted');
 export const addTask = (task) => api.post('/tasks', task);
 export const deleteTask = (id) => api.delete(`/tasks/${id}`);
+export const completeTask = (id) => api.post(`/tasks/complete/${id}`);
