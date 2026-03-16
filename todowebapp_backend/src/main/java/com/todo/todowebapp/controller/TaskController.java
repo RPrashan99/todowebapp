@@ -24,7 +24,10 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/tasks")
 @CrossOrigin(origins = "http://localhost:3000")
 public class TaskController {
-    
+
+    public TaskController(TaskService taskService) {
+        this.taskService = taskService;
+    }
 
     @Autowired
     private TaskService taskService;
@@ -50,8 +53,8 @@ public class TaskController {
     }
 
     @PostMapping("/complete/{id}")
-    public Task completeTask(@PathVariable Long id) {
-        return taskService.completeTask(id);
+    public ResponseEntity<Task> completeTask(@PathVariable Long id) {
+        return ResponseEntity.ok(taskService.completeTask(id));
     }
     
 
