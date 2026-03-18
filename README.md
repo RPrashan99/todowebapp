@@ -2,7 +2,7 @@
 
 A full-stack Todo application with a **Java Spring Boot** backend and a **React** frontend. The project is containerized using Docker and can be run locally using `docker-compose`.
 
-## � Technology Stack
+## 🔧 Technology Stack
 
 - **Backend:** Java 17+, Spring Boot, Spring Data JPA
 - **Frontend:** React, Create React App, Axios for API calls
@@ -18,7 +18,7 @@ A full-stack Todo application with a **Java Spring Boot** backend and a **React*
 - REST API backend with JSON responses
 - Frontend consumes API and renders responsive UI
 
-## �🧩 Project Structure
+## 🧩 Project Structure
 
 - `todowebapp_backend/` - Spring Boot backend service
 - `todowebapp_frontend/` - React frontend
