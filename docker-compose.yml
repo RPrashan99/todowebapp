@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+
+  frontend-service:
+    build: ./todowebapp_frontend
+    container_name: frontend-service
+    environment:
+      - API_BASE_URL=http://backend-service:8080/api
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend-service
+    networks:
+      - todowebapp-network
+
+  backend-service:
+    build: ./todowebapp_backend
+    container_name: backend-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - todowebapp-network
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: todo_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    networks:
+      - todowebapp-network
+
+volumes:
+  postgres_data:
+
+networks:
+  todowebapp-network:
+    driver: bridge
