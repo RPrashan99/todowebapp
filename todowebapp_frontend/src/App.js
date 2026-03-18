@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { addTask, deleteTask, completeTask, getUncompletedTasks } from "./ApiService/Api";
+import { addTask, deleteTask, completeTask, getUncompletedTasks } from "./ApiService/Api.js";
+import { ToastContainer, toast } from "react-toastify";
+import TaskList from "./components/TaskList.js";
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -18,38 +20,40 @@ function App() {
   const handleAdd = async () => {
 
     if (!title.trim()) {
-      alert("Task title cannot be empty.");
-      return;
-    }
-
-    if (!description.trim()) {
-      alert("Task description cannot be empty.");
+      toast.error("Task title cannot be empty.");
       return;
     }
 
     if(title.length > 100) {
-      alert("Title cannot exceed 100 characters.");
+      toast.error("Title cannot exceed 100 characters.");
       return;
     }
 
     if(description.length > 200) {
-      alert("Description cannot exceed 200 characters.");
+      toast.error("Description cannot exceed 200 characters.");
       return;
     }
 
     await addTask({ title, description });
+    toast.success("Task added successfully!");
     setTitle("");
     setDescription("");
     loadTasks();
   };
 
   const handleDelete = async (id) => {
-    await deleteTask(id);
+    try{
+      await deleteTask(id);
+    }catch(e){
+      toast.error("Task delete error.")
+    }
+    toast.success("Task deleted.");
     loadTasks();
   };
 
   const handleComplete = async (id) => {
     await completeTask(id);
+    toast.success("Task marked as completed.");
     loadTasks();
   }
 
@@ -93,29 +97,7 @@ function App() {
           
           <div className="scroll-area">
             {tasks.length > 0 ? (
-              <ul className="task-list">
-                {tasks.map((task) => (
-                  <li key={task.id} className="task-card">
-                    <div className="task-content">
-                      <h3>{task.title}</h3>
-                      {task.description && <p>{task.description}</p>}
-                      <span className="task-date">{task.date}</span>
-                    </div>
-                    <div className="task-actions">
-                      <button className="complete-btn" onClick={() => handleComplete(task.id)}>
-                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                      </button>
-                      <button className="delete-btn" onClick={() => handleDelete(task.id)}>
-                        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                      </button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <TaskList tasks={tasks} handleComplete={handleComplete} handleDelete={handleDelete} />
             ) : (
               <div className="empty-state">
                 <p>Your workspace is clear.</p>
@@ -124,6 +106,8 @@ function App() {
           </div>
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} 
+        newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
     </div>
   );
 }
